@@ -15,15 +15,34 @@ document.addEventListener('DOMContentLoaded', () => {
   const totalDisplay = document.getElementById('calc-total-amount');
 
   // State
-  let selectedChildren = 2; // Default 2 children to showcase sibling discount immediately
-  let selectedGradeRate = 220000; // Default Early Years rate
-  let activeAddons = [45000]; // Default: Extended 10hr care
+  let selectedChildren = 2;
+  let selectedGradeRate = 220000;
+  let activeAddons = [];
 
   const gradeRates = {
     creche: 180000,
     nursery: 220000,
     primary: 250000
   };
+
+  // Sync initial state from active DOM elements
+  const initialActiveChild = document.querySelector('[data-calc-children].active');
+  if (initialActiveChild) {
+    selectedChildren = parseInt(initialActiveChild.getAttribute('data-calc-children'), 10) || 2;
+  }
+
+  const initialActiveGrade = document.querySelector('[data-calc-grade].active');
+  if (initialActiveGrade) {
+    const gradeKey = initialActiveGrade.getAttribute('data-calc-grade');
+    selectedGradeRate = gradeRates[gradeKey] || 220000;
+  }
+
+  document.querySelectorAll('.calc-addon-toggle.active').forEach(toggle => {
+    const cost = parseInt(toggle.getAttribute('data-addon-cost'), 10) || 0;
+    if (cost > 0 && !activeAddons.includes(cost)) {
+      activeAddons.push(cost);
+    }
+  });
 
   function formatCurrency(amount) {
     return '₦' + Number(amount).toLocaleString('en-NG');

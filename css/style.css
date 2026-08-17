@@ -640,8 +640,8 @@ button, input, select, textarea {
 
 .hero-stats-row {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
   margin-top: 2.75rem;
   padding-top: 2rem;
   border-top: 1px solid var(--border-subtle);
@@ -654,17 +654,24 @@ button, input, select, textarea {
 
 .stat-number {
   font-family: var(--font-serif);
-  font-size: 2rem;
+  font-size: 1.75rem;
   font-weight: 800;
   color: var(--navy-900);
   line-height: 1;
 }
 
 .stat-label {
-  font-size: 0.825rem;
+  font-size: 0.8rem;
   color: var(--text-muted);
   margin-top: 0.35rem;
   font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .hero-stats-row {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
 }
 
 /* Hero Media Showcase */
@@ -1817,6 +1824,302 @@ button, input, select, textarea {
 }
 
 /* ==========================================================================
+   SIGNATURE ENRICHMENT PROGRAMS (BRAINYHIVE STYLE)
+   ========================================================================== */
+.signature-programs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.signature-card {
+  background: #FFFFFF;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 2.25rem 2rem;
+  display: flex;
+  flex-direction: column;
+  transition: all var(--transition-smooth);
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+.signature-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--navy-800), var(--gold-500));
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.signature-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-hover);
+  border-color: rgba(19, 64, 116, 0.4);
+}
+
+.signature-card:hover::before {
+  opacity: 1;
+}
+
+.signature-icon-box {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background: var(--navy-50);
+  border: 1px solid rgba(19, 64, 116, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--navy-800);
+  margin-bottom: 1.25rem;
+}
+
+.signature-title {
+  font-size: 1.2rem;
+  color: var(--navy-900);
+  margin-bottom: 0.75rem;
+  font-weight: 700;
+}
+
+.signature-desc {
+  font-size: 0.875rem;
+  color: var(--text-body);
+  line-height: 1.65;
+  margin-bottom: 1.25rem;
+  flex-grow: 1;
+}
+
+.signature-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--gold-700);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ==========================================================================
+   INTERACTIVE SIBLING CONCESSION & TUITION CALCULATOR
+   ========================================================================== */
+.tuition-calc-card {
+  background: #FFFFFF;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+
+.calc-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+}
+
+.calc-controls-pane {
+  padding: 3rem 2.5rem;
+  background: #FFFFFF;
+}
+
+.calc-results-pane {
+  background: var(--navy-950);
+  color: #FFFFFF;
+  padding: 3rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+}
+
+.calc-group-label {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--navy-900);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.calc-chips-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.calc-chip {
+  padding: 0.65rem 1.25rem;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--border-subtle);
+  background: var(--bg-surface);
+  color: var(--text-body);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.calc-chip:hover {
+  border-color: var(--navy-600);
+  color: var(--navy-900);
+}
+
+.calc-chip.active {
+  background: var(--navy-900);
+  border-color: var(--navy-900);
+  color: #FFFFFF;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(11, 37, 69, 0.2);
+}
+
+.calc-chip-badge {
+  font-size: 0.7rem;
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--radius-full);
+  background: var(--gold-500);
+  color: var(--navy-950);
+  font-weight: 800;
+}
+
+.calc-addons-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.calc-addon-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1.15rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.calc-addon-toggle:hover {
+  border-color: var(--navy-600);
+}
+
+.calc-addon-toggle.active {
+  background: var(--navy-50);
+  border-color: var(--navy-700);
+}
+
+.calc-addon-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.calc-addon-checkbox {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  border: 1.5px solid var(--navy-700);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #FFFFFF;
+  color: transparent;
+  font-size: 0.75rem;
+  font-weight: 800;
+  transition: all var(--transition-fast);
+}
+
+.calc-addon-toggle.active .calc-addon-checkbox {
+  background: var(--navy-900);
+  color: #FFFFFF;
+}
+
+.calc-addon-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--navy-900);
+}
+
+.calc-addon-price {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--navy-700);
+}
+
+/* Results Pane */
+.calc-results-header h3 {
+  font-size: 1.5rem;
+  color: #FFFFFF;
+  margin-bottom: 0.5rem;
+}
+
+.calc-results-header p {
+  font-size: 0.85rem;
+  color: #94A3B8;
+  margin-bottom: 2rem;
+}
+
+.calc-breakdown-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.calc-breakdown-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  color: #CBD5E1;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.calc-breakdown-row.discount-highlight {
+  color: var(--accent-emerald);
+  font-weight: 700;
+}
+
+.calc-grand-total-box {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  margin-bottom: 1.75rem;
+}
+
+.calc-total-label {
+  font-size: 0.8rem;
+  color: var(--gold-300);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+}
+
+.calc-total-amount {
+  font-family: var(--font-serif);
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  line-height: 1;
+}
+
+/* ==========================================================================
    RESPONSIVE DESIGN BREAKPOINTS
    ========================================================================== */
 @media (max-width: 1024px) {
@@ -1846,6 +2149,14 @@ button, input, select, textarea {
 
   .programs-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .signature-programs-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .calc-grid {
+    grid-template-columns: 1fr;
   }
 
   .pillars-grid {
@@ -1884,6 +2195,14 @@ button, input, select, textarea {
 
   .programs-grid {
     grid-template-columns: 1fr;
+  }
+
+  .signature-programs-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .calc-controls-pane, .calc-results-pane {
+    padding: 2rem 1.5rem;
   }
 
   .pillars-grid {
