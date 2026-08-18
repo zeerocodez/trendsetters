@@ -1,234 +1,280 @@
 /**
- * Main Interactive Application Script
- * The Trendsetters Schools
+ * The Trendsetters Schools — Interactive Digital Experience
  */
 document.addEventListener('DOMContentLoaded', () => {
-  /* ==========================================
-     1. STICKY HEADER & SCROLL BEHAVIOR
-     ========================================== */
-  const header = document.querySelector('.main-header');
+  /* ==========================================================================
+     1. SCROLL INTERSECTIONS & FLOATING NAV ISLAND MORPH
+     ========================================================================== */
+  const navIsland = document.getElementById('nav-island');
+  
   window.addEventListener('scroll', () => {
     if (window.scrollY > 40) {
-      header?.classList.add('scrolled');
+      navIsland?.classList.add('scrolled');
     } else {
-      header?.classList.remove('scrolled');
+      navIsland?.classList.remove('scrolled');
     }
-  });
+  }, { passive: true });
 
-  /* ==========================================
-     2. MOBILE DRAWER NAVIGATION
-     ========================================== */
-  const mobileToggle = document.querySelector('.mobile-nav-toggle');
+  /* ==========================================================================
+     2. SCROLL REVEAL OBSERVER
+     ========================================================================== */
+  const revealElements = document.querySelectorAll('.reveal');
+  
+  if ('IntersectionObserver' in window) {
+    const revealObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.12,
+      rootMargin: '0px 0px -40px 0px'
+    });
+
+    revealElements.forEach(el => revealObserver.observe(el));
+  } else {
+    revealElements.forEach(el => el.classList.add('active'));
+  }
+
+  /* ==========================================================================
+     3. MOBILE DRAWER NAVIGATION
+     ========================================================================== */
+  const mobileToggleBtn = document.getElementById('mobile-toggle-btn');
+  const drawerCloseBtn = document.getElementById('drawer-close-btn');
   const mobileDrawer = document.getElementById('mobile-drawer');
-  const drawerClose = document.getElementById('drawer-close');
-  const drawerOverlay = document.getElementById('drawer-overlay');
   const drawerLinks = document.querySelectorAll('.drawer-nav-link');
 
-  function openMobileMenu() {
+  function openDrawer() {
     mobileDrawer?.classList.add('open');
-    drawerOverlay?.classList.add('active');
     document.body.style.overflow = 'hidden';
   }
 
-  function closeMobileMenu() {
+  function closeDrawer() {
     mobileDrawer?.classList.remove('open');
-    drawerOverlay?.classList.remove('active');
     document.body.style.overflow = '';
   }
 
-  mobileToggle?.addEventListener('click', openMobileMenu);
-  drawerClose?.addEventListener('click', closeMobileMenu);
-  drawerOverlay?.addEventListener('click', closeMobileMenu);
+  mobileToggleBtn?.addEventListener('click', openDrawer);
+  drawerCloseBtn?.addEventListener('click', closeDrawer);
+  drawerLinks.forEach(link => link.addEventListener('click', closeDrawer));
 
-  drawerLinks.forEach(link => {
-    link.addEventListener('click', closeMobileMenu);
-  });
-
-  /* ==========================================
-     3. GALLERY FILTERING & LIGHTBOX
-     ========================================== */
-  const filterBtns = document.querySelectorAll('.gallery-filter-btn');
-  const galleryItems = document.querySelectorAll('.gallery-item');
-  const lightbox = document.getElementById('gallery-lightbox');
-  const lightboxImg = document.getElementById('lightbox-img');
-  const lightboxCaption = document.getElementById('lightbox-caption');
+  /* ==========================================================================
+     4. CURATED CAMPUS GALLERY & LIGHTBOX
+     ========================================================================== */
+  const galleryItems = document.querySelectorAll('.js-gallery-item');
+  const lightboxModal = document.getElementById('lightbox-modal');
+  const lightboxImage = document.getElementById('lightbox-image');
+  const lightboxTitle = document.getElementById('lightbox-title');
+  const lightboxTag = document.getElementById('lightbox-tag');
   const lightboxClose = document.getElementById('lightbox-close');
 
-  // Filter items
-  filterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      filterBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-
-      const filter = btn.getAttribute('data-filter');
-
-      galleryItems.forEach(item => {
-        const category = item.getAttribute('data-category');
-        if (filter === 'all' || category === filter) {
-          item.style.display = 'block';
-          setTimeout(() => {
-            item.style.opacity = '1';
-            item.style.transform = 'scale(1)';
-          }, 50);
-        } else {
-          item.style.opacity = '0';
-          item.style.transform = 'scale(0.95)';
-          setTimeout(() => {
-            item.style.display = 'none';
-          }, 300);
-        }
-      });
-    });
-  });
-
-  // Lightbox Trigger
-  galleryItems.forEach(item => {
-    item.addEventListener('click', () => {
-      const img = item.querySelector('img');
-      const title = item.querySelector('.gallery-title')?.textContent || '';
-      const category = item.querySelector('.gallery-category-tag')?.textContent || '';
-
-      if (lightbox && lightboxImg && img) {
-        lightboxImg.src = img.src;
-        lightboxImg.alt = img.alt;
-        if (lightboxCaption) {
-          lightboxCaption.innerHTML = `<strong>${title}</strong><br><span style="font-size:0.85rem;color:var(--gold-primary);">${category}</span>`;
-        }
-        lightbox.classList.add('active');
-        document.body.style.overflow = 'hidden';
-      }
-    });
-  });
+  function openLightbox(src, title, tag) {
+    if (lightboxModal && lightboxImage && lightboxTitle && lightboxTag) {
+      lightboxImage.src = src;
+      lightboxImage.alt = title;
+      lightboxTitle.textContent = title;
+      lightboxTag.textContent = tag;
+      lightboxModal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+  }
 
   function closeLightbox() {
-    if (lightbox) {
-      lightbox.classList.remove('active');
+    if (lightboxModal) {
+      lightboxModal.classList.remove('active');
       document.body.style.overflow = '';
     }
   }
 
-  lightboxClose?.addEventListener('click', closeLightbox);
-  lightbox?.addEventListener('click', (e) => {
-    if (e.target === lightbox) closeLightbox();
+  galleryItems.forEach(item => {
+    item.addEventListener('click', () => {
+      const src = item.getAttribute('data-src') || '';
+      const title = item.getAttribute('data-title') || '';
+      const tag = item.getAttribute('data-tag') || '';
+      openLightbox(src, title, tag);
+    });
   });
 
+  lightboxClose?.addEventListener('click', closeLightbox);
+  lightboxModal?.addEventListener('click', (e) => {
+    if (e.target === lightboxModal) closeLightbox();
+  });
+
+  /* ==========================================================================
+     5. STREAMLINED SIBLING TUITION CALCULATOR
+     ========================================================================== */
+  const childrenBtns = document.querySelectorAll('#calc-children-group .calc-chip-btn');
+  const gradeBtns = document.querySelectorAll('#calc-grade-group .calc-chip-btn');
+  const careCheckbox = document.getElementById('addon-care');
+  const displayTotal = document.getElementById('calc-display-total');
+  const displayDiscount = document.getElementById('calc-display-discount');
+
+  // Pricing Matrix (Per Child Base Termly)
+  const basePrices = {
+    creche: 240000,
+    nursery: 220000,
+    primary: 260000
+  };
+
+  const careAddonCost = 45000;
+
+  let selectedChildren = 2;
+  let selectedGrade = 'nursery';
+
+  function updateCalculator() {
+    const basePerChild = basePrices[selectedGrade] || 220000;
+    const hasCare = careCheckbox?.checked ?? false;
+    const carePerChild = hasCare ? careAddonCost : 0;
+
+    const totalBeforeDiscount = (basePerChild + carePerChild) * selectedChildren;
+
+    // Sibling Concession Discount Rate
+    let discountRate = 0;
+    let discountLabel = 'Standard Family Rate';
+
+    if (selectedChildren === 2) {
+      discountRate = 0.10;
+      discountLabel = '✓ 10% Sibling Concession Applied';
+    } else if (selectedChildren === 3) {
+      discountRate = 0.15;
+      discountLabel = '✓ 15% Sibling Concession Applied';
+    } else if (selectedChildren >= 4) {
+      discountRate = 0.20;
+      discountLabel = '✓ 20% Multi-Child Family Concession Applied';
+    }
+
+    const discountAmount = (basePerChild * selectedChildren) * discountRate;
+    const finalTotal = Math.round(totalBeforeDiscount - discountAmount);
+
+    if (displayTotal) {
+      displayTotal.textContent = `₦${finalTotal.toLocaleString()}`;
+    }
+
+    if (displayDiscount) {
+      displayDiscount.textContent = discountLabel;
+    }
+  }
+
+  childrenBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      childrenBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedChildren = parseInt(btn.getAttribute('data-children') || '2', 10);
+      updateCalculator();
+    });
+  });
+
+  gradeBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      gradeBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedGrade = btn.getAttribute('data-grade') || 'nursery';
+      updateCalculator();
+    });
+  });
+
+  careCheckbox?.addEventListener('change', updateCalculator);
+  updateCalculator();
+
+  /* ==========================================================================
+     6. FAST ADMISSION & TOUR MODAL
+     ========================================================================== */
+  const openModalBtns = document.querySelectorAll('.js-open-modal');
+  const admissionModal = document.getElementById('admission-modal');
+  const modalCloseBtn = document.getElementById('modal-close');
+  const modalTitle = document.getElementById('modal-title');
+  const modalSubtitle = document.getElementById('modal-subtitle');
+  const tourDateGroup = document.getElementById('tour-date-group');
+  const formSubmitText = document.getElementById('form-submit-text');
+  const admissionForm = document.getElementById('admission-form');
+  const modalSuccessView = document.getElementById('modal-success-view');
+  const successRefCode = document.getElementById('success-ref-code');
+  const whatsappDirectLink = document.getElementById('whatsapp-direct-link');
+
+  let currentModalMode = 'apply';
+
+  function openAdmissionModal(mode = 'apply') {
+    currentModalMode = mode;
+    if (admissionModal) {
+      if (mode === 'tour') {
+        if (modalTitle) modalTitle.textContent = 'Schedule a Private Campus Tour';
+        if (modalSubtitle) modalSubtitle.textContent = 'Personalized Guided Visit';
+        if (tourDateGroup) tourDateGroup.style.display = 'block';
+        if (formSubmitText) formSubmitText.textContent = 'Confirm Tour Reservation';
+      } else {
+        if (modalTitle) modalTitle.textContent = 'Apply for 2026/2027 Admission';
+        if (modalSubtitle) modalSubtitle.textContent = 'Fast Online Application';
+        if (tourDateGroup) tourDateGroup.style.display = 'none';
+        if (formSubmitText) formSubmitText.textContent = 'Submit Application';
+      }
+
+      admissionForm.style.display = 'block';
+      if (modalSuccessView) modalSuccessView.style.display = 'none';
+      admissionModal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  function closeAdmissionModal() {
+    if (admissionModal) {
+      admissionModal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  }
+
+  openModalBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const mode = btn.getAttribute('data-mode') || 'apply';
+      openAdmissionModal(mode);
+    });
+  });
+
+  modalCloseBtn?.addEventListener('click', closeAdmissionModal);
+  admissionModal?.addEventListener('click', (e) => {
+    if (e.target === admissionModal) closeAdmissionModal();
+  });
+
+  // Global Keyboard Escape
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && lightbox?.classList.contains('active')) {
+    if (e.key === 'Escape') {
       closeLightbox();
+      closeAdmissionModal();
+      closeDrawer();
     }
   });
 
-  /* ==========================================
-     4. PARENT TESTIMONIALS CAROUSEL
-     ========================================== */
-  const testimonialCards = document.querySelectorAll('.testimonial-card');
-  const testimonialDots = document.querySelectorAll('.testimonial-dot');
-  let currentTestimonialIndex = 0;
-  let testimonialInterval;
+  // Form Submission
+  admissionForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const parentName = document.getElementById('parent-name')?.value || '';
+    const parentPhone = document.getElementById('parent-phone')?.value || '';
+    const childName = document.getElementById('child-name')?.value || '';
+    const childGrade = document.getElementById('child-grade')?.value || '';
+    const tourDate = document.getElementById('tour-date')?.value || '';
 
-  function showTestimonial(index) {
-    testimonialCards.forEach((card, i) => {
-      card.classList.toggle('active', i === index);
-    });
-    testimonialDots.forEach((dot, i) => {
-      dot.classList.toggle('active', i === index);
-    });
-    currentTestimonialIndex = index;
-  }
+    const randomRef = 'TTS-' + Math.floor(1000 + Math.random() * 9000);
 
-  testimonialDots.forEach((dot, i) => {
-    dot.addEventListener('click', () => {
-      showTestimonial(i);
-      resetAutoPlay();
-    });
+    if (successRefCode) successRefCode.textContent = randomRef;
+
+    // WhatsApp Message URL
+    const message = encodeURIComponent(
+      `Hello The Trendsetters Schools,\n\nI submitted an ${currentModalMode === 'tour' ? 'in-person campus tour booking' : 'online admission request'}.\n` +
+      `Reference ID: ${randomRef}\n` +
+      `Parent: ${parentName}\n` +
+      `Phone: ${parentPhone}\n` +
+      `Child: ${childName}\n` +
+      `Pathway: ${childGrade}` +
+      (tourDate ? `\nPreferred Date: ${tourDate}` : '')
+    );
+
+    if (whatsappDirectLink) {
+      whatsappDirectLink.href = `https://wa.me/2348035477181?text=${message}`;
+    }
+
+    admissionForm.style.display = 'none';
+    if (modalSuccessView) modalSuccessView.style.display = 'block';
   });
-
-  function nextTestimonial() {
-    const nextIndex = (currentTestimonialIndex + 1) % testimonialCards.length;
-    showTestimonial(nextIndex);
-  }
-
-  function resetAutoPlay() {
-    clearInterval(testimonialInterval);
-    testimonialInterval = setInterval(nextTestimonial, 6500);
-  }
-
-  if (testimonialCards.length > 0) {
-    showTestimonial(0);
-    testimonialInterval = setInterval(nextTestimonial, 6500);
-  }
-
-  /* ==========================================
-     5. FAQ ACCORDION
-     ========================================== */
-  const faqItems = document.querySelectorAll('.faq-item');
-
-  faqItems.forEach(item => {
-    const questionBtn = item.querySelector('.faq-question');
-    questionBtn?.addEventListener('click', () => {
-      const isOpen = item.classList.contains('active');
-
-      // Close all other FAQs
-      faqItems.forEach(otherItem => {
-        if (otherItem !== item) {
-          otherItem.classList.remove('active');
-        }
-      });
-
-      // Toggle current
-      item.classList.toggle('active', !isOpen);
-    });
-  });
-
-  /* ==========================================
-     6. SCROLL REVEAL (INTERSECTION OBSERVER)
-     ========================================== */
-  const observerOptions = {
-    root: null,
-    rootMargin: '0px',
-    threshold: 0.12
-  };
-
-  const revealObserver = new IntersectionObserver((entries, observer) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('is-visible');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, observerOptions);
-
-  document.querySelectorAll('.reveal-fade-up, .reveal-fade-left, .reveal-fade-right').forEach(el => {
-    revealObserver.observe(el);
-  });
-
-  /* ==========================================
-     7. QUICK INQUIRY FORM SUBMISSION
-     ========================================== */
-  const contactForm = document.getElementById('quick-inquiry-form');
-  const inquiryFeedback = document.getElementById('inquiry-feedback');
-
-  if (contactForm) {
-    contactForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const submitBtn = contactForm.querySelector('button[type="submit"]');
-      if (submitBtn) {
-        const originalText = submitBtn.innerHTML;
-        submitBtn.innerHTML = '<span>Sending Message...</span>';
-        submitBtn.disabled = true;
-
-        setTimeout(() => {
-          contactForm.reset();
-          submitBtn.innerHTML = originalText;
-          submitBtn.disabled = false;
-          if (inquiryFeedback) {
-            inquiryFeedback.style.display = 'block';
-            setTimeout(() => {
-              inquiryFeedback.style.display = 'none';
-            }, 6000);
-          }
-        }, 1200);
-      }
-    });
-  }
 });

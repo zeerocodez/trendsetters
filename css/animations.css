@@ -1,35 +1,17 @@
 /* ==========================================================================
-   THE TRENDSETTERS SCHOOLS - MICRO-ANIMATIONS & KEYFRAMES
+   THE TRENDSETTERS SCHOOLS — CINEMATIC MICRO-ANIMATIONS & REVEALS
    ========================================================================== */
 
-/* Shimmer on Logo & Gold Accents */
-@keyframes crestShimmer {
-  0% { transform: translateX(-100%) skewX(-25deg); }
-  35%, 100% { transform: translateX(200%) skewX(-25deg); }
-}
-
-@keyframes goldPulse {
-  0%, 100% {
-    box-shadow: 0 0 15px rgba(212, 175, 55, 0.25);
-  }
-  50% {
-    box-shadow: 0 0 35px rgba(212, 175, 55, 0.55), 0 0 10px rgba(245, 229, 171, 0.4);
-  }
-}
-
-@keyframes floatSlow {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
+/* Keyframe Animations */
 @keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(12px);
+    transform: translateY(24px);
   }
   to {
     opacity: 1;
@@ -37,84 +19,56 @@
   }
 }
 
-@keyframes scaleUp {
-  from {
-    opacity: 0;
-    transform: scale(0.94);
+@keyframes floatGentle {
+  0%, 100% {
+    transform: translateY(0);
   }
-  to {
-    opacity: 1;
-    transform: scale(1);
+  50% {
+    transform: translateY(-8px);
   }
 }
 
-/* Reveal on Scroll Elements */
-.reveal-fade-up {
+@keyframes pulseGoldGlow {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.45);
+  }
+}
+
+/* Float Helpers */
+.anim-float {
+  animation: floatGentle 6s ease-in-out infinite;
+}
+
+.anim-glow {
+  animation: pulseGoldGlow 3s infinite ease-in-out;
+}
+
+/* Scroll Reveal Utility Classes */
+.reveal {
   opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateY(24px);
+  transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
   will-change: opacity, transform;
 }
 
-.reveal-fade-up.is-visible {
+.reveal.active {
   opacity: 1;
   transform: translateY(0);
 }
 
-.reveal-fade-left {
-  opacity: 0;
-  transform: translateX(-40px);
-  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: opacity, transform;
-}
-
-.reveal-fade-left.is-visible {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-.reveal-fade-right {
-  opacity: 0;
-  transform: translateX(40px);
-  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: opacity, transform;
-}
-
-.reveal-fade-right.is-visible {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-/* Stagger Children Delays */
 .delay-100 { transition-delay: 0.1s; }
 .delay-200 { transition-delay: 0.2s; }
 .delay-300 { transition-delay: 0.3s; }
 .delay-400 { transition-delay: 0.4s; }
-.delay-500 { transition-delay: 0.5s; }
 
-/* Glowing Badge Pulse */
-.pulse-gold {
-  animation: goldPulse 3s infinite ease-in-out;
+/* Interactive Hover Lifts */
+.hover-lift {
+  transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.35s ease;
 }
 
-/* Interactive Ripple on Button Click */
-.btn {
-  position: relative;
-  overflow: hidden;
-}
-
-.btn .ripple {
-  position: absolute;
-  border-radius: 50%;
-  transform: scale(0);
-  animation: rippleEffect 0.6s linear;
-  background-color: rgba(255, 255, 255, 0.35);
-  pointer-events: none;
-}
-
-@keyframes rippleEffect {
-  to {
-    transform: scale(4);
-    opacity: 0;
-  }
+.hover-lift:hover {
+  transform: translateY(-4px);
 }
