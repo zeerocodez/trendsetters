@@ -1,5 +1,6 @@
 /* ==========================================================================
    THE TRENDSETTERS SCHOOLS — CINEMATIC MICRO-ANIMATIONS & REVEALS
+   Safe progressive enhancement: Content is ALWAYS visible by default!
    ========================================================================== */
 
 /* Keyframe Animations */
@@ -11,7 +12,7 @@
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(24px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
@@ -37,36 +38,25 @@
   }
 }
 
-/* Float Helpers */
+/* Float & Glow Helpers */
 .anim-float {
-  animation: floatGentle 6s ease-in-out infinite;
+  animation: floatGentle 5s ease-in-out infinite;
 }
 
 .anim-glow {
   animation: pulseGoldGlow 3s infinite ease-in-out;
 }
 
-/* Scroll Reveal Utility Classes */
+/* Scroll Reveal Classes (Progressive Enhancement — 100% safe) */
 .reveal {
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
-  will-change: opacity, transform;
-}
-
-.reveal.active {
   opacity: 1;
-  transform: translateY(0);
+  transform: none;
+  transition: opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1), transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
 }
-
-.delay-100 { transition-delay: 0.1s; }
-.delay-200 { transition-delay: 0.2s; }
-.delay-300 { transition-delay: 0.3s; }
-.delay-400 { transition-delay: 0.4s; }
 
 /* Interactive Hover Lifts */
 .hover-lift {
-  transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.35s ease;
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s ease;
 }
 
 .hover-lift:hover {
